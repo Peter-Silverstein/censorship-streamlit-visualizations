@@ -1,46 +1,42 @@
+import streamlit as st
+import streamlit.components.v1 as components
 import pandas as pd
 import networkx as nx
-import altair as alt
-import altair_nx as nxa
-import streamlit as st
-from streamlit_agraph import agraph, Node, Edge, Config
+from pyvis.network import Network
 
-st.set_page_config(page_title="Network Graph", layout="wide")
-
-st.legacy_altair_chart = True  # Use legacy serialization
-
-nodes = pd.read_csv("network-graphs/nodes.csv")
+# Importing Data
 edges = pd.read_csv("network-graphs/edges.csv")
+edges = edges[edges['domain'] == 'epa.gov']
 
-nodes_epa = nodes[nodes['domain'] == "epa.gov"]
-edges_epa = edges[edges['source_domain'] == "epa.gov"]
+st.title('Network Test Graph')
 
-nodes_noaa = nodes[nodes['domain'] == "noaa.gov"]
-edges_noaa = edges[edges['source_domain'] == "noaa.gov"]
+domain_list = ["epa.gov", "noaa.gov", "sustainability.gov"]
+selected_domain = st.multiselect("Select domain(s) to visualize", domain_list)
 
-nodes_sust = nodes[nodes['domain'] == "sustainability.gov"]
-edges_sust = edges[edges['source_domain'] == "sustainability.gov"]
+# ADD SLIDER
 
-G_epa = nx.Graph()
+if len(selected_domain) == 0:
+    G = nx.from_pandas_edgelist(edges, "source", "target")
 
-for _, row in nodes_epa.iterrows():
-    node_id = str(row.iloc[0])
-    timestamp = row.iloc[2]
-    G_epa.add_node(node_id, timestamp = timestamp)
+    network = Network(height = '435px', bgcolor='white', font_color = 'black', cdn_resources='remote')
+    network.from_nx(G)
+    network.repulsion(node_distance=400, central_gravity=0.33,
+                       spring_length=2, spring_strength=0.10,
+                       damping=0.95)
+    
+    # Save and read graph as HTML file (on Streamlit Sharing)
+    try:
+        path = '/tmp'
+        network.save_graph(f'{path}/pyvis_graph.html')
+        HtmlFile = open(f'{path}/pyvis_graph.html','r',encoding='utf-8')
+    # Save and read graph as HTML file (locally)
+    except:
+        path = '/html_files'
+        network.save_graph(f'{path}/pyvis_graph.html')
+        HtmlFile = open(f'{path}/pyvis_graph.html','r',encoding='utf-8')
 
-for _, row in edges_epa.iterrows():
-    source = str(row.iloc[0])
-    target = str(row.iloc[2])
-    timestamp = row.iloc[3]
-    G_epa.add_edge(source, target, timestamp = timestamp)
+    components.html(HtmlFile.read(), height = 450)
 
-# Convert NetworkX graph to agraph format
-nodes = [Node(id=str(n), label=str(n)) for n in G_epa.nodes()]
-edges = [Edge(source=str(e[0]), target=str(e[1])) for e in G_epa.edges()]
+else:
+    st.text("Select TEST TEst")
 
-config = Config(width=700, height=500, physics=False, 
-                hierarchical=False, staticGraph=True,
-                directed=True, collapsible=True,)
-                
-return_value = agraph(nodes=nodes, edges=edges, config=config)
-return_value

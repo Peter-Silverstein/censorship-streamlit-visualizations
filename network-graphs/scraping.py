@@ -14,7 +14,7 @@ import os
 target_domains = ["epa.gov", "sustainability.gov", "noaa.gov"]
 
 # Define timepoints for analysis (YYYYMMDD format)
-timepoints = ["20250401"]
+timepoints = ["20210101"]
 
 # User agent (required for waybackpy)
 user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
@@ -30,7 +30,7 @@ def get_archived_urls(domain, timepoint, max_urls=100):
             domain, 
             user_agent,
             start_timestamp=timepoint,
-            end_timestamp=str(int(timepoint) + 10000)
+            end_timestamp=str(int(timepoint) + 300000)
         )
         
         # Get snapshots
