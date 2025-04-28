@@ -4,42 +4,42 @@ import altair as alt
 import streamlit as st
 import regex as re
 
-st.set_page_config(layout="wide")
-
-@st.cache_data
-def get_fed_data():
-    df = pd.read_csv("envirofedtracker.csv")
-
-    # Agency DataFrame
-    agency = df['Agency'].value_counts()
-    agency_df = agency.reset_index()
-    agency_df.columns = ['Agency', 'Count']
-    agency_df = agency_df.sort_values(by=['Count'], ascending = False)
-    top5_agencies = agency_df.head(5)
-    other_sum = agency_df.iloc[5:]['Count'].sum()
-    simplified_agency_counts = pd.concat([
-        top5_agencies,
-        pd.DataFrame({'Agency': ['OTHER'], 'Count': [other_sum]})
-        ], ignore_index=True)
-    simplified_agency_counts['text_position'] = simplified_agency_counts['Count'].cumsum() - simplified_agency_counts['Count']
-    simplified_agency_counts['text_position'] = simplified_agency_counts['text_position'] + simplified_agency_counts['Count'] / 2
-    total = simplified_agency_counts['Count'].sum()
-    simplified_agency_counts['midpoint_norm'] = simplified_agency_counts['text_position'] / total
-        
-    # Topics DataFrame
-    df_topics = df[["Agency", "Topic 1", "Topic 2"]].copy()
-    df_topics['ID'] = df.index
-    df_long = pd.melt(df_topics, 
-                id_vars=['ID', "Agency"], 
-                value_vars=['Topic 1', 'Topic 2'],
-                var_name='value',
-                value_name='Topic')
-    df_long = df_long.drop("value", axis = 1).dropna()
-    agencies = pd.unique(df_long['Agency'])
-    return df_long, agencies, simplified_agency_counts
 
 # Run!
 def run_fedtracker():
+    @st.cache_data
+    def get_fed_data():
+        df = pd.read_csv("envirofedtracker.csv")
+        agencies = pd.read_csv("agencylookup.csv")
+
+        # Agency DataFrame
+        agency = df['Agency'].value_counts()
+        agency_df = agency.reset_index()
+        agency_df.columns = ['Agency', 'Count']
+        agency_df = agency_df.sort_values(by=['Count'], ascending = False)
+        top5_agencies = agency_df.head(5)
+        other_sum = agency_df.iloc[5:]['Count'].sum()
+        simplified_agency_counts = pd.concat([
+            top5_agencies,
+            pd.DataFrame({'Agency': ['OTHER'], 'Count': [other_sum]})
+            ], ignore_index=True)
+        simplified_agency_counts['text_position'] = simplified_agency_counts['Count'].cumsum() - simplified_agency_counts['Count']
+        simplified_agency_counts['text_position'] = simplified_agency_counts['text_position'] + simplified_agency_counts['Count'] / 2
+        total = simplified_agency_counts['Count'].sum()
+        simplified_agency_counts['midpoint_norm'] = simplified_agency_counts['text_position'] / total
+            
+        # Topics DataFrame
+        df_topics = df[["Agency", "Topic 1", "Topic 2"]].copy()
+        df_topics['ID'] = df.index
+        df_long = pd.melt(df_topics, 
+                    id_vars=['ID', "Agency"], 
+                    value_vars=['Topic 1', 'Topic 2'],
+                    var_name='value',
+                    value_name='Topic')
+        df_long = df_long.drop("value", axis = 1).dropna()
+        # agencies = pd.unique(df_long['Agency'])
+        return df_long, agencies, simplified_agency_counts
+
     def filter_data(df, agency = None):
         filtered_df = df
         if agency:
@@ -95,6 +95,13 @@ def run_fedtracker():
     st.subheader("Which federal agency websites had the most climate-related content removals?")
     st.altair_chart(agency_chart, use_container_width=True)
 
+    st.write("Unsurprisingly, the EPA tops the list, but the Department of Transportation's presence in the top 5 shows how " \
+     "climate-related censorship actions pervade a variety of government agencies. In the following chart, you can examine what " \
+     "censorship actions look like for each of the federal entities within the dataset. Note the presence of both explicitly climate-" \
+     "related entities (e.g., EPA, NOAA) alongside ones that are, at a surface level, not related to climate (e.g., Department of " \
+     "Justice, Department of State).")
+ 
+
     st.subheader("What are the changes related to?")
 
     col1, col2 = st.columns([1,5])
@@ -102,10 +109,15 @@ def run_fedtracker():
     with col1:
         agency = st.selectbox(
             "Select an agency",
-            agencies,
+            agencies["Agency"],
             index=None,
             placeholder="All agencies"
         )
+
+        if agency:  
+            longname = agencies.loc[agencies["Agency"] == agency, "LongName"].iloc[0]
+        else:
+            longname = "All Tracked Government Websites"
 
     filtered_df = filter_data(df_long, agency)
     filtered_df = filtered_df.reset_index(drop=True)
@@ -119,11 +131,11 @@ def run_fedtracker():
                 y=alt.Y('Topic', title=None, sort = '-x'),
                 tooltip=['Topic', 'Count'],
             ).configure_bar(
-                color="#FF0000"
+                color="red"
                 ).properties(
-                title="",
+                title=longname,
                 width=150
-            ).interactive()
+            )
         
         st.altair_chart(topics_chart, use_container_width=True)
 

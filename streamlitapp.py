@@ -1,5 +1,6 @@
 import streamlit as st
 import research_papers
+import fedtracker_st
 
 # set up page
 st.set_page_config(page_title="REDACTED", layout="wide")
@@ -29,6 +30,10 @@ html, body, [class*="css"] {
     margin-top: 50px;
     position: relative;
 }
+
+.plain-text {
+    font-family: 'Courier New', Courier, monospace;
+}        
 
 #redacted-title::after {
     content: 'A Look At Censorship in Modern America';
@@ -97,3 +102,5 @@ html, body, [class*="css"] {
 """, unsafe_allow_html=True)
 
 research_papers.run()
+
+fedtracker_st.run_fedtracker()
