@@ -53,7 +53,10 @@ def main():
     "is highly contested political territory (such as research on the climate or vaccines), the controlling party" \
     "may choose to censor information that does not conform to their worldview. In this section, we offer an exploration of" \
     "a dataset from the Environmental Data & Governance Initiative (EDGI).")
-    st.write("The EDGI Enviro Fed Web Tracker")
+    st.write("The EDGI tracks environment-related content removal and accessibility changes made by the Trump Administration" \
+    "over the first few months of 2025. Changes are categorized with the agency they were associated with, as well as what " \
+    "topics they involved. For example, one entry for the Department of Transportation indicated that a menu link to the " \
+    "'Climate and Sustainability' page was removed, which was tagged with the 'Climate' and 'Infrastructure' tags.")
     df_long, agencies, simplified_agency_counts = get_fed_data()
 
     agency_order = ["EPA", "DOT", "NOAA", "CEQ", "USGCRP", "OTHER"]
@@ -89,7 +92,7 @@ def main():
             grid=False
         )
 
-    st.subheader("Which US Federal Agencies are most affected?")
+    st.subheader("Which federal agency websites had the most climate-related content removals?")
     st.altair_chart(agency_chart, use_container_width=True)
 
     st.subheader("What are the changes related to?")
@@ -123,8 +126,6 @@ def main():
             ).interactive()
         
         st.altair_chart(topics_chart, use_container_width=True)
-
-        st.table(agencies)
 
 if __name__ == "__main__":
     main()
