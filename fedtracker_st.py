@@ -8,6 +8,7 @@ import regex as re
 @st.cache_data
 def get_fed_data():
     df = pd.read_csv("envirofedtracker.csv")
+    agencies = pd.read_csv("agencylookup.csv")
 
     # Agency DataFrame
     agency = df['Agency'].value_counts()
@@ -34,7 +35,8 @@ def get_fed_data():
                   var_name='value',
                   value_name='Topic')
     df_long = df_long.drop("value", axis = 1).dropna()
-    agencies = pd.unique(df_long['Agency'])
+    #agencies = pd.unique(df_long['Agency'])
+    #agencies = agencies.merge(agency_lookup, how = "inner", on="Agency")
     return df_long, agencies, simplified_agency_counts
 
 def filter_data(df, agency = None):
@@ -95,6 +97,12 @@ def main():
     st.subheader("Which federal agency websites had the most climate-related content removals?")
     st.altair_chart(agency_chart, use_container_width=True)
 
+    st.write("Unsurprisingly, the EPA tops the list, but the Department of Transportation's presence in the top 5 shows how " \
+    "climate-related censorship actions pervade a variety of government agencies. In the following chart, you can examine what " \
+    "censorship actions look like for each of the federal entities within the dataset. Note the presence of both explicitly climate-" \
+    "related entities (e.g., EPA, NOAA) alongside ones that are, at a surface level, not related to climate (e.g., Department of " \
+    "Justice, Department of State).")
+
     st.subheader("What are the changes related to?")
 
     col1, col2 = st.columns([1,5])
@@ -102,10 +110,14 @@ def main():
     with col1:
         agency = st.selectbox(
             "Select an agency",
-            agencies,
+            agencies["Agency"],
             index=None,
             placeholder="All agencies"
         )
+        if agency:  
+            longname = agencies.loc[agencies["Agency"] == agency, "LongName"].iloc[0]
+        else:
+            longname = "All Tracked Government Websites"
 
     filtered_df = filter_data(df_long, agency)
     filtered_df = filtered_df.reset_index(drop=True)
@@ -115,15 +127,16 @@ def main():
 
     with col2:
         topics_chart = alt.Chart(grouped_counts).mark_bar().encode(
-                x=alt.X('Count:Q'),
+                x=alt.X('Count:Q', axis=alt.Axis(
+                tickMinStep=1)),
                 y=alt.Y('Topic', title=None, sort = '-x'),
                 tooltip=['Topic', 'Count'],
             ).configure_bar(
-                color="#FF0000"
+                color="red"
                 ).properties(
-                title="",
+                title=longname,
                 width=150
-            ).interactive()
+            )
         
         st.altair_chart(topics_chart, use_container_width=True)
 
