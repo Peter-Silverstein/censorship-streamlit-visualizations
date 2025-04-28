@@ -1,8 +1,8 @@
+import numpy as np
 import pandas as pd
 import altair as alt
-import numpy as np
 import streamlit as st
-import re
+import regex as re
 
 # Get Data
 @st.cache_data
