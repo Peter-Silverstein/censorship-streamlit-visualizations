@@ -6,13 +6,17 @@ from itertools import combinations
 import networkx as nx
 from pyvis.network import Network
 import research_papers
+import matplotlib.pyplot as plt
+import re
+import plotly.express as px
+
 
 def run():
     # ACTUAL STREAMLIT APP
     st.markdown('<div id="redacted-title">REDACTED</div>', unsafe_allow_html=True)
     @st.cache_data
     def load_data():
-        df = pd.read_csv('banned_words.csv')
+        df = pd.read_csv('abstracts.csv')
         return df
 
     df = load_data()
@@ -26,43 +30,53 @@ def run():
     </style>
     """, unsafe_allow_html=True)
 
+    banned_words = pd.read_csv('banned_words.txt', header=None).values.flatten().tolist()
+    banned_words = [word.lower() for word in banned_words]
+    df['abstract_lower'] = df['abstract'].str.lower()
 
+    # Check if any banned word appears in the abstract
+    def contains_banned(abstract):
+        return any(re.search(rf'\b{re.escape(word)}\b', str(abstract), re.IGNORECASE) for word in banned_words)
+
+    # Apply function
+    df['contains_banned'] = df['abstract_lower'].apply(contains_banned)
+
+    from collections import Counter
+
+    # Only keep titles that contain banned words
+    banned_titles = df[df['contains_banned']]['abstract_lower']
+
+    # Count banned words
+    word_counter = Counter()
+
+    for title in banned_titles:
+        for word in banned_words:
+            if word in title:
+                word_counter[word] += 1
+
+    # visualization
+    word_counts = pd.DataFrame.from_dict(word_counter, orient='index', columns=['count']).sort_values('count', ascending=False)
+    
     # PARAGRAPH 1
-    st.markdown('<div class="typewriter"> </div>', unsafe_allow_html=True)
+    percent_banned = df['contains_banned'].mean() * 100
+    percent_text = f"""{percent_banned:.2f}% contained flagged words as listed by the <a href="https://www.nytimes.com/interactive/2025/03/07/us/trump-federal-agencies-websites-words-dei.html" target="_blank" style="color: inherit; text-decoration: underline;">New York Times</a>."""
+    st.markdown('<div class="typewriter-1">Out of 1000 abstracts selected from top journals,</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="typewriter-2">{percent_text}</div>', unsafe_allow_html=True)
 
-    # NETWORK GRAPH - RESEARCH TEMRS BEING REMOVED CLUSTERED BY THEME
-    all_themes = sorted(set([theme.strip() for themes in df['Themes'] for theme in themes.split(',')]))
-    selected_themes = st.multiselect("Select Themes to View:", options=all_themes, default=all_themes)
-
-    filtered_df = df[df['Themes'].apply(lambda x: any(theme.strip() in selected_themes for theme in x.split(',')))]
-
-    theme_pairs = []
-
-    for themes in filtered_df['Themes']:
-        theme_list = [theme.strip() for theme in themes.split(',')]
-        if len(theme_list) > 1:
-            for pair in combinations(sorted(theme_list), 2):
-                theme_pairs.append(pair)
-
-    pair_df = pd.DataFrame(theme_pairs, columns=['Theme1', 'Theme2'])
-    G = nx.Graph()
-
-    for (theme1, theme2), count in pair_df.value_counts().items():
-        G.add_edge(theme1, theme2, weight=count)
-
-    net = Network(height="750px", width="100%", bgcolor="white", font_color="black")
-
-    for node in G.nodes:
-        net.add_node(node, label=node)
-
-    for source, target, data in G.edges(data=True):
-        net.add_edge(source, target, value=data['weight'])
-
-    net.repulsion(node_distance=200, central_gravity=0.3, spring_length=200, spring_strength=0.05, damping=0.95)
-
-    net.save_graph('network.html')
-    HtmlFile = open('network.html', 'r', encoding='utf-8')
-    components.html(HtmlFile.read(), height=800)
+    
+    fig = px.bar(
+        word_counts.reset_index(),
+        x='index',       # banned words
+        y='count',       # their frequency
+        labels={'index': 'Banned Word', 'count': 'Count'},
+        title='Banned Words Frequency in Research Abstracts',
+        color_discrete_sequence=['red']  # make bars red
+    )
+    fig.update_layout(
+        xaxis_tickangle=-45,
+        bargap=0.2
+    )
+    st.plotly_chart(fig, use_container_width=True)
 
     # PARAGRAPH 2
     st.markdown('<div class="typewriter">Connecting redacted narratives...</div>', unsafe_allow_html=True)

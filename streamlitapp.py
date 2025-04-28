@@ -31,7 +31,9 @@ html, body, [class*="css"] {
 }
 
 #redacted-title::after {
-    content: '';
+    content: 'A Look At Censorship in Modern America';
+    font-size: 20px;
+    color: #FFFFFF;
     position: absolute;
     top: 40%;
     left: 10%;
@@ -52,29 +54,45 @@ html, body, [class*="css"] {
     to { transform: scaleX(1); }
 }
 
-.typewriter {
+.typewriter-1, .typewriter-2 {
     font-family: 'Courier New', Courier, monospace;
     overflow: hidden;
-    border-right: 0.15em solid black;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-    white-space: normal;
+    white-space: nowrap;
     margin: 20px auto;
+    text-align: center;
     letter-spacing: 0.08em;
-    animation: typing 3s steps(40, end), blink-caret 0.8s step-end infinite;
-    font-size: 24px;
-    width: 400ch; /* width in characters */
+    font-size: 16px;
+    width: 0;
+    border-right: 0.15em solid black; 
 }
 
-@keyframes typing {
+.typewriter-1 {
+    animation:
+        typing1 4s steps(50, end) 0s forwards,
+        caret-disappear 0.1s forwards 0.1s;
+}
+
+.typewriter-2 {
+    animation:
+        typing2 4s steps(70, end) 3s forwards,
+        caret-disappear 0.1s forwards 0s;
+}
+
+/* Typing animations */
+@keyframes typing1 {
     from { width: 0 }
-    to { width: 400ch }
+    to { width: 100% }
 }
 
-@keyframes blink-caret {
-    from, to { border-color: transparent }
-    50% { border-color: black; }
+@keyframes typing2 {
+    from { width: 0 }
+    to { width: 100% }
 }
+
+@keyframes caret-disappear {
+    from { border-right: 0.15em solid black; }
+    to { border-right: none; }
+} 
 </style>
 """, unsafe_allow_html=True)
 
