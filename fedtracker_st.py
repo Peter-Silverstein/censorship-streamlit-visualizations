@@ -4,11 +4,11 @@ import altair as alt
 import streamlit as st
 import regex as re
 
-# Get Data
+st.set_page_config(layout="wide")
+
 @st.cache_data
 def get_fed_data():
     df = pd.read_csv("envirofedtracker.csv")
-    agencies = pd.read_csv("agencylookup.csv")
 
     # Agency DataFrame
     agency = df['Agency'].value_counts()
@@ -25,29 +25,27 @@ def get_fed_data():
     simplified_agency_counts['text_position'] = simplified_agency_counts['text_position'] + simplified_agency_counts['Count'] / 2
     total = simplified_agency_counts['Count'].sum()
     simplified_agency_counts['midpoint_norm'] = simplified_agency_counts['text_position'] / total
-    
+        
     # Topics DataFrame
     df_topics = df[["Agency", "Topic 1", "Topic 2"]].copy()
     df_topics['ID'] = df.index
     df_long = pd.melt(df_topics, 
-                  id_vars=['ID', "Agency"], 
-                  value_vars=['Topic 1', 'Topic 2'],
-                  var_name='value',
-                  value_name='Topic')
+                id_vars=['ID', "Agency"], 
+                value_vars=['Topic 1', 'Topic 2'],
+                var_name='value',
+                value_name='Topic')
     df_long = df_long.drop("value", axis = 1).dropna()
-    #agencies = pd.unique(df_long['Agency'])
-    #agencies = agencies.merge(agency_lookup, how = "inner", on="Agency")
+    agencies = pd.unique(df_long['Agency'])
     return df_long, agencies, simplified_agency_counts
 
-def filter_data(df, agency = None):
-    filtered_df = df
-    if agency:
-        filtered_df = filtered_df[filtered_df['Agency'] == agency]
-        
-    return filtered_df
-
-def main():
-    st.set_page_config(layout="wide")
+# Run!
+def run_fedtracker():
+    def filter_data(df, agency = None):
+        filtered_df = df
+        if agency:
+            filtered_df = filtered_df[filtered_df['Agency'] == agency]
+            
+        return filtered_df
 
     st.header("Climate Censorship on Government Websites")
     st.write("Beyond censorship that occurs upstream, when funding is allocated to researchers, " \
@@ -97,12 +95,6 @@ def main():
     st.subheader("Which federal agency websites had the most climate-related content removals?")
     st.altair_chart(agency_chart, use_container_width=True)
 
-    st.write("Unsurprisingly, the EPA tops the list, but the Department of Transportation's presence in the top 5 shows how " \
-    "climate-related censorship actions pervade a variety of government agencies. In the following chart, you can examine what " \
-    "censorship actions look like for each of the federal entities within the dataset. Note the presence of both explicitly climate-" \
-    "related entities (e.g., EPA, NOAA) alongside ones that are, at a surface level, not related to climate (e.g., Department of " \
-    "Justice, Department of State).")
-
     st.subheader("What are the changes related to?")
 
     col1, col2 = st.columns([1,5])
@@ -110,14 +102,10 @@ def main():
     with col1:
         agency = st.selectbox(
             "Select an agency",
-            agencies["Agency"],
+            agencies,
             index=None,
             placeholder="All agencies"
         )
-        if agency:  
-            longname = agencies.loc[agencies["Agency"] == agency, "LongName"].iloc[0]
-        else:
-            longname = "All Tracked Government Websites"
 
     filtered_df = filter_data(df_long, agency)
     filtered_df = filtered_df.reset_index(drop=True)
@@ -127,18 +115,16 @@ def main():
 
     with col2:
         topics_chart = alt.Chart(grouped_counts).mark_bar().encode(
-                x=alt.X('Count:Q', axis=alt.Axis(
-                tickMinStep=1)),
+                x=alt.X('Count:Q'),
                 y=alt.Y('Topic', title=None, sort = '-x'),
                 tooltip=['Topic', 'Count'],
             ).configure_bar(
-                color="red"
+                color="#FF0000"
                 ).properties(
-                title=longname,
+                title="",
                 width=150
-            )
+            ).interactive()
         
         st.altair_chart(topics_chart, use_container_width=True)
 
-if __name__ == "__main__":
-    main()
+run_fedtracker()
