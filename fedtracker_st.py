@@ -7,7 +7,9 @@ import regex as re
 
 # Run!
 def run_fedtracker():
+    
     @st.cache_data
+
     def get_fed_data():
         df = pd.read_csv("envirofedtracker.csv")
         agencies = pd.read_csv("agencylookup.csv")

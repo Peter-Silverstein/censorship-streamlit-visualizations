@@ -66,16 +66,29 @@ def run():
     
     fig = px.bar(
         word_counts.reset_index(),
-        x='index',       # banned words
-        y='count',       # their frequency
+        x='index',
+        y='count',
         labels={'index': 'Banned Word', 'count': 'Count'},
-        title='Banned Words Frequency in Research Abstracts',
-        color_discrete_sequence=['red']  # make bars red
+        color_discrete_sequence=['red']
     )
+
     fig.update_layout(
+        title={
+            'text': 'Banned Words Frequency in Research Abstracts',
+            'y':0.9,
+            'x':0.5,
+            'xanchor': 'center',
+            'yanchor': 'top',
+            'font': {
+                'family': 'Courier New, monospace',
+                'size': 18,
+                'color': 'black',
+            }
+        },
         xaxis_tickangle=-45,
         bargap=0.2
     )
+
     st.plotly_chart(fig, use_container_width=True)
 
     # PARAGRAPH 2

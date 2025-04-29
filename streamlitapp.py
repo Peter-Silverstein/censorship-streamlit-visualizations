@@ -58,6 +58,10 @@ html, body, [class*="css"] {
 @keyframes strikeThrough {
     to { transform: scaleX(1); }
 }
+            
+.plain-text {
+    font-family: 'Courier New', Courier, monospace;
+}
 
 .typewriter-1, .typewriter-2 {
     font-family: 'Courier New', Courier, monospace;
@@ -79,7 +83,7 @@ html, body, [class*="css"] {
 
 .typewriter-2 {
     animation:
-        typing2 4s steps(70, end) 3s forwards,
+        typing2 4s steps(70, end) 1.5s forwards,
         caret-disappear 0.1s forwards 0s;
 }
 
@@ -102,5 +106,4 @@ html, body, [class*="css"] {
 """, unsafe_allow_html=True)
 
 research_papers.run()
-
 fedtracker_st.run_fedtracker()
