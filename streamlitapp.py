@@ -155,7 +155,7 @@ st.markdown('<div id="redacted-title">REDACTED</div>', unsafe_allow_html=True)
 st.markdown('<div id="byline">by Jefrey Alexander, Janavi Kumar, and Peter Silverstein</div>', unsafe_allow_html=True)
 st.markdown('<div class="typewriter-1">This project explores patterns and potential ramifications </div>', unsafe_allow_html=True)
 st.markdown('<div class="typewriter-2">of information removal in recent years in the United States, </div>', unsafe_allow_html=True)
-st.markdown('<div class="typewriter-3">from books bans to defunding research to the alterration of government websites. </div>', unsafe_allow_html=True)
+st.markdown('<div class="typewriter-3">from defunding research to books bans to the alterration of government websites. </div>', unsafe_allow_html=True)
 
 time.sleep(6)
 st.markdown('<div id="section-title">Defunding Research</div>', unsafe_allow_html=True)

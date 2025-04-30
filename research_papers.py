@@ -9,6 +9,7 @@ import research_papers
 import matplotlib.pyplot as plt
 import re
 import plotly.express as px
+from wordcloud import WordCloud
 
 
 def run():
@@ -39,15 +40,16 @@ def run():
     </style>
     """, unsafe_allow_html=True)
 
+    # algorithm for banned words
     banned_words = pd.read_csv('banned_words.txt', header=None).values.flatten().tolist()
     banned_words = [word.lower() for word in banned_words]
     df['abstract_lower'] = df['abstract'].str.lower()
 
-    # Check if any banned word appears in the abstract
+    # check if any banned word appears in the abstract
     def contains_banned(abstract):
         return any(re.search(rf'\b{re.escape(word)}\b', str(abstract), re.IGNORECASE) for word in banned_words)
 
-    # Apply function
+    # apply function
     df['contains_banned'] = df['abstract_lower'].apply(contains_banned)
 
     from collections import Counter
@@ -63,42 +65,81 @@ def run():
             if word in title:
                 word_counter[word] += 1
 
-    # visualization
+    # store data
     word_counts = pd.DataFrame.from_dict(word_counter, orient='index', columns=['count']).sort_values('count', ascending=False)
-    
-    # PARAGRAPH 1
+
+    # store the titles for potential interactivity
+    banned_word_titles = {
+        word: df[df['abstract_lower'].str.contains(rf'\b{re.escape(word)}\b', na=False, regex=True)]['title'].tolist()
+        for word in word_counts.index
+    }
+
+    # update the data frame including the titles for each banned word
+    word_counts['titles'] = word_counts.index.map(lambda word: "<br>".join(banned_word_titles[word][:10]))  # show first 10 titles
+
+    #VISUAL
+    # caption
     st.markdown('<div class="plain-text">Recently, restrictions on scientific research and scholarship in the U.S. have been imposed through multiple executive orders. Billions of dollars allocated for research have been frozen, and topics such as climate change and gender continue to be targeted and censored. </div>', unsafe_allow_html=True)
     st.markdown('<div class="plain-text">We look at what could happen if research papers dealing with \"flagged\" topics were removed. </div>', unsafe_allow_html=True)
-    percent_banned = df['contains_banned'].mean() * 100
+    percent_banned = df['contains_banned'].mean() * 1000 / 488; #there are 488 available abstracts
     percent_text = f"""{percent_banned:.2f}% contained recent \"flagged words\" as listed by the <a href="https://www.nytimes.com/interactive/2025/03/07/us/trump-federal-agencies-websites-words-dei.html" target="_blank" style="color: inherit; text-decoration: underline;">New York Times</a>."""
-    st.markdown('<div class="plain-text">Out of 1000 randomly selected abstracts from the <a href="https://aclanthology.org/2020.acl-main.447" target="_blank" style="color: inherit; text-decoration: underline;">Semantic Scholar Open Research Corpus</a></div>', unsafe_allow_html=True)
+    st.markdown('<div class="plain-text">Out of 488 randomly selected abstracts from the <a href="https://aclanthology.org/2020.acl-main.447" target="_blank" style="color: inherit; text-decoration: underline;">Semantic Scholar Open Research Corpus</a></div>', unsafe_allow_html=True)
     st.markdown(f'<div class="plain-text">{percent_text}</div>', unsafe_allow_html=True)
 
-    fig = px.bar(
-        word_counts.reset_index(),
-        x='index',
-        y='count',
-        labels={'index': 'Flagged Word', 'count': 'Count'},
-        color_discrete_sequence=['red']
-    )
+    # WORD CLOUD
+    def red_color_func(*args, **kwargs):
+        return "hsl(0, 100%%, %d%%)" % random.randint(30, 70)
 
-    fig.update_layout(
-        title={
-            'text': 'Flagged Words Frequency in Research Abstracts',
-            'y':0.9,
-            'x':0.5,
-            'xanchor': 'center',
-            'yanchor': 'top',
-            'font': {
-                'family': 'Courier New, monospace',
-                'size': 18,
-                'color': 'black',
-            }
-        },
-        xaxis_tickangle=-45,
-        bargap=0.2
-    )
+    col1, col2 = st.columns(2)
 
-    st.plotly_chart(fig, use_container_width=True)
+    with col1:
+        st.subheader("Flagged Words Word Cloud")
+        wordcloud = WordCloud(
+            width=600,
+            height=400,
+            background_color='white',
+            color_func=red_color_func
+        ).generate_from_frequencies(word_counter)
 
+        fig_wc, ax_wc = plt.subplots(figsize=(8, 6))
+        ax_wc.imshow(wordcloud, interpolation='bilinear')
+        ax_wc.axis("off")
+        st.pyplot(fig_wc)
+        
+
+    # Horizontal Bar Chart
+    with col2:
+            word_counts_sorted = word_counts.reset_index().sort_values(by='count', ascending=False)
+            fig = px.bar(
+                word_counts_sorted,
+                x='count',
+                y='index',
+                labels={'index': 'Flagged Word', 'count': 'Count'},
+                color_discrete_sequence=['red'],
+                orientation='h',
+                custom_data=['titles']
+            )
+
+            fig.update_traces(
+                hovertemplate='<b>%{x}</b><br>Count: %{y}<br><br><b>Abstract Titles:</b><br>%{customdata[0]}<extra></extra>'
+            )
+
+            fig.update_layout(
+                title={
+                    'text': 'Flagged Words Frequency in Research Abstracts',
+                    'y':0.9,
+                    'x':0.5,
+                    'xanchor': 'center',
+                    'yanchor': 'top',
+                    'font': {
+                        'family': 'Courier New, monospace!',
+                        'size': 17,
+                        'color': 'black',
+                    }
+                },
+                xaxis_tickangle=-45,
+                bargap=0.2
+            )
+
+            st.plotly_chart(fig, use_container_width=True)
 run()
