@@ -31,6 +31,16 @@ html, body, [class*="css"] {
     position: relative;
 }
             
+#byline {
+    font-size: 13px;
+    text-align: center;   
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bold;
+    opacity: 0;
+    animation: fadeIn 2s ease-in forwards;   
+    position: relative; 
+}
+            
 #section-title {
     font-size: 50px;   
     font-weight: bold;
@@ -82,7 +92,7 @@ html, body, [class*="css"] {
     margin: 20px auto;
     text-align: center;
     letter-spacing: 0.08em;
-    font-size: 16px;
+    font-size: 18px;
     width: 0;
     border-right: 0.15em solid black; 
 }
@@ -155,6 +165,7 @@ h1, h2, h3, .stMarkdown > div {
 
 # project description
 st.markdown('<div id="redacted-title">REDACTED</div>', unsafe_allow_html=True)
+st.markdown('<div id="byline">by Jefrey Alexander, Janavi Kumar, and Peter Silverstein</div>', unsafe_allow_html=True)
 st.markdown('<div class="typewriter-1">This project explores patterns and potential ramifications </div>', unsafe_allow_html=True)
 st.markdown('<div class="typewriter-2">of information removal in recent years in the United States, </div>', unsafe_allow_html=True)
 st.markdown('<div class="typewriter-3">from books bans to flagged research to the alterration of government websites. </div>', unsafe_allow_html=True)
