@@ -7,7 +7,7 @@ import regex as re
 st.markdown("""
     <style>
     .st-bo {
-        background-color: rgb(0, 0, 0); important! 
+        background-color: rgb(0, 0, 0); !important
     }
                 
     .plain-text {
@@ -26,7 +26,6 @@ st.markdown("""
 def run_fedtracker():
     
     @st.cache_data
-
     def get_fed_data():
         df = pd.read_csv("envirofedtracker.csv")
         agencies = pd.read_csv("agencylookup.csv")
@@ -67,6 +66,7 @@ def run_fedtracker():
         return filtered_df
 
     st.markdown('<div class="plain-text">Beyond censorship that occurs upstream, when funding is allocated to researchers, availability of existing information, research, and data can be censored as well. When scientific information is highly contested political territory (such as research on the climate or vaccines), the controlling party may choose to censor information that does not conform to their worldview. In this section, we offer an exploration of a dataset from the Environmental Data & Governance Initiative (EDGI). </div>', unsafe_allow_html=True)
+    st.write("")
     st.markdown('<div class="plain-text">The EDGI tracks environment-related content removal and accessibility changes made by the Trump Administration over the first few months of 2025. Changes are categorized with the agency they were associated with, as well as what topics they involved. For example, one entry for the Department of Transportation indicated that a menu link to the \'Climate and Sustainability\' page was removed, which was tagged with the \'Climate\' and \'Infrastructure\' tags. </div>', unsafe_allow_html=True)
     
     df_long, agencies, simplified_agency_counts = get_fed_data()
@@ -147,4 +147,4 @@ def run_fedtracker():
         
         st.altair_chart(topics_chart, use_container_width=True)
 
-run_fedtracker()
+# run_fedtracker()

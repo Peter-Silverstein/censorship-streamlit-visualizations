@@ -179,4 +179,4 @@ def run():
     )
 
     st.plotly_chart(sunburst_fig, use_container_width=True)
-run()
+# run()

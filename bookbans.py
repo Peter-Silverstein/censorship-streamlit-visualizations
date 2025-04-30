@@ -70,5 +70,5 @@ def run_bookbans():
     st_folium(folium_map, width=700, height=500)
 
 # To run
-run_bookbans()
+# run_bookbans()
 
