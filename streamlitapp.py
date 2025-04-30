@@ -49,11 +49,7 @@ html, body, [class*="css"] {
     animation: fadeIn 2s ease-in forwards;
     animation-delay: 0s;
     position: relative;
-}
-
-.plain-text {
-    font-family: 'Courier New', Courier, monospace;
-}        
+}  
 
 #redacted-title::after {
     content: 'A Look At Censorship in Modern America';
@@ -80,11 +76,7 @@ html, body, [class*="css"] {
 @keyframes strikeThrough {
     to { transform: scaleX(1); }
 }
-            
-.plain-text {
-    font-family: 'Courier New', Courier, monospace;
-}
-        
+           
 .typewriter-1, .typewriter-2 , .typewriter-3 {
     font-family: 'Courier New', Courier, monospace;
     overflow: hidden;
@@ -155,11 +147,6 @@ h1, h2, h3, .stMarkdown > div {
     animation: fadeIn 1s ease-in;
 }
 
-/* Shrink sidebar padding and hide built-in title */
-[data-testid="stSidebar"] > div:first-child {
-    padding-top: 1rem;
-}
-
 </style>
 """, unsafe_allow_html=True)
 
@@ -168,7 +155,7 @@ st.markdown('<div id="redacted-title">REDACTED</div>', unsafe_allow_html=True)
 st.markdown('<div id="byline">by Jefrey Alexander, Janavi Kumar, and Peter Silverstein</div>', unsafe_allow_html=True)
 st.markdown('<div class="typewriter-1">This project explores patterns and potential ramifications </div>', unsafe_allow_html=True)
 st.markdown('<div class="typewriter-2">of information removal in recent years in the United States, </div>', unsafe_allow_html=True)
-st.markdown('<div class="typewriter-3">from books bans to flagged research to the alterration of government websites. </div>', unsafe_allow_html=True)
+st.markdown('<div class="typewriter-3">from books bans to defunding research to the alterration of government websites. </div>', unsafe_allow_html=True)
 
 #load empty sections first visually
 #section1 = st.empty() 
@@ -177,7 +164,7 @@ section3 = st.empty()
 
 time.sleep(6)
 st.markdown('<div id="section-title">Book Bans</div>', unsafe_allow_html=True)
-st.markdown('<div id="section-title">Flagged Research Papers</div>', unsafe_allow_html=True)
+st.markdown('<div id="section-title">Defunding Research</div>', unsafe_allow_html=True)
 with st.container():
     st.markdown('<div class="fade-container">', unsafe_allow_html=True)
     import research_papers
@@ -185,7 +172,7 @@ with st.container():
     st.markdown('</div>', unsafe_allow_html=True)
 
 time.sleep(2)
-st.markdown('<div id="section-title">Alterring Websites</div>', unsafe_allow_html=True)
+st.markdown('<div id="section-title">Removing & Alterring Websites</div>', unsafe_allow_html=True)
 with st.container():
     st.markdown('<div class="fade-container">', unsafe_allow_html=True)
     import fedtracker_st

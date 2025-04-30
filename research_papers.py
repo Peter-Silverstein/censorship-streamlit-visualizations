@@ -26,6 +26,16 @@ def run():
     .st-bo {
         background-color: rgb(0, 0, 0); important! 
     }
+                
+    .plain-text {
+        font-size: 15px;   
+        font-family: 'Courier New', Courier, monospace;
+        text-align: center;
+        opacity: 0;
+        animation: fadeIn 3s ease-in forwards;
+        animation-delay: 0s;
+        position: relative;
+    }                             
     </style>
     """, unsafe_allow_html=True)
 
@@ -57,12 +67,13 @@ def run():
     word_counts = pd.DataFrame.from_dict(word_counter, orient='index', columns=['count']).sort_values('count', ascending=False)
     
     # PARAGRAPH 1
+    st.markdown('<div class="plain-text">Recently, restrictions on scientific research and scholarship in the U.S. have been imposed through multiple executive orders. Billions of dollars allocated for research have been frozen, and topics such as climate change and gender continue to be targeted and censored. </div>', unsafe_allow_html=True)
+    st.markdown('<div class="plain-text">We look at what could happen if research papers dealing with \"flagged\" topics were removed. </div>', unsafe_allow_html=True)
     percent_banned = df['contains_banned'].mean() * 100
-    percent_text = f"""{percent_banned:.2f}% contained flagged words as listed by the <a href="https://www.nytimes.com/interactive/2025/03/07/us/trump-federal-agencies-websites-words-dei.html" target="_blank" style="color: inherit; text-decoration: underline;">New York Times</a>."""
-    #st.markdown('<div class="typewriter-1">Out of 1000 abstracts selected from top journals,</div>', unsafe_allow_html=True)
-    #st.markdown(f'<div class="typewriter-2">{percent_text}</div>', unsafe_allow_html=True)
+    percent_text = f"""{percent_banned:.2f}% contained recent \"flagged words\" as listed by the <a href="https://www.nytimes.com/interactive/2025/03/07/us/trump-federal-agencies-websites-words-dei.html" target="_blank" style="color: inherit; text-decoration: underline;">New York Times</a>."""
+    st.markdown('<div class="plain-text">Out of 1000 randomly selected abstracts from the <a href="https://aclanthology.org/2020.acl-main.447" target="_blank" style="color: inherit; text-decoration: underline;">Semantic Scholar Open Research Corpus</a></div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="plain-text">{percent_text}</div>', unsafe_allow_html=True)
 
-    
     fig = px.bar(
         word_counts.reset_index(),
         x='index',
@@ -89,4 +100,5 @@ def run():
     )
 
     st.plotly_chart(fig, use_container_width=True)
+
 run()
