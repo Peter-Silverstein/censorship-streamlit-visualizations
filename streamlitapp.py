@@ -151,11 +151,11 @@ h1, h2, h3, .stMarkdown > div {
 with st.sidebar.expander("Navigate"):
     menu = st.radio(
         "",
-        ["Introduction", "Defunding Research", "Climate Censorship", "Book Bans"]
+        ["Home", "Defunding Research", "Climate Censorship", "Book Bans"]
     )
 
 # project description
-if menu == "Introduction":
+if menu == "Home":
     st.markdown('<div id="redacted-title">REDACTED</div>', unsafe_allow_html=True)
     st.markdown('<div id="byline">by Jefrey Alexander, Janavi Kumar, and Peter Silverstein</div>', unsafe_allow_html=True)
     st.markdown('<div class="typewriter-1">This project explores patterns and potential ramifications </div>', unsafe_allow_html=True)
