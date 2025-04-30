@@ -30,6 +30,16 @@ html, body, [class*="css"] {
     margin-top: 50px;
     position: relative;
 }
+            
+#section-title {
+    font-size: 50px;   
+    font-weight: bold;
+    text-align: center;
+    opacity: 0;
+    animation: fadeIn 2s ease-in forwards;
+    animation-delay: 0s;
+    position: relative;
+}
 
 .plain-text {
     font-family: 'Courier New', Courier, monospace;
@@ -149,14 +159,24 @@ st.markdown('<div class="typewriter-1">This project explores patterns and potent
 st.markdown('<div class="typewriter-2">of information removal in recent years in the United States, </div>', unsafe_allow_html=True)
 st.markdown('<div class="typewriter-3">from books bans to flagged research to the alterration of government websites. </div>', unsafe_allow_html=True)
 
-time.sleep(12)
-st.markdown("<div style='animation: fadeIn 2s;'>", unsafe_allow_html=True)
+#load empty sections first visually
+#section1 = st.empty() 
+section2 = st.empty()
+section3 = st.empty()
 
-#import bookbans
-#bookbans.run_bookbans()
+time.sleep(6)
+st.markdown('<div id="section-title">Book Bans</div>', unsafe_allow_html=True)
+st.markdown('<div id="section-title">Flagged Research Papers</div>', unsafe_allow_html=True)
+with st.container():
+    st.markdown('<div class="fade-container">', unsafe_allow_html=True)
+    import research_papers
+    research_papers.run()
+    st.markdown('</div>', unsafe_allow_html=True)
 
-import research_papers
-research_papers.run()
-
-import fedtracker_st
-fedtracker_st.run_fedtracker()
+time.sleep(2)
+st.markdown('<div id="section-title">Alterring Websites</div>', unsafe_allow_html=True)
+with st.container():
+    st.markdown('<div class="fade-container">', unsafe_allow_html=True)
+    import fedtracker_st
+    fedtracker_st.run_fedtracker()
+    st.markdown('</div>', unsafe_allow_html=True)
