@@ -151,7 +151,7 @@ h1, h2, h3, .stMarkdown > div {
 with st.sidebar.expander("Navigate"):
     menu = st.radio(
         "",
-        ["Home", "Defunding Research", "Climate Censorship", "Book Bans"]
+        ["Home", "Book Bans", "Defunding Research", "Climate Censorship"]
     )
 
 # project description
@@ -160,8 +160,16 @@ if menu == "Home":
     st.markdown('<div id="byline">by Jefrey Alexander, Janavi Kumar, and Peter Silverstein</div>', unsafe_allow_html=True)
     st.markdown('<div class="typewriter-1">This project explores patterns and potential ramifications </div>', unsafe_allow_html=True)
     st.markdown('<div class="typewriter-2">of information removal in recent years in the United States, </div>', unsafe_allow_html=True)
-    st.markdown('<div class="typewriter-3">from defunding research to book bans to the alterration of government websites. </div>', unsafe_allow_html=True)
+    st.markdown('<div class="typewriter-3">from book bans to defunding research to the alterration of government websites. </div>', unsafe_allow_html=True)
 
+elif menu == "Book Bans":
+    st.markdown('<div id="section-title">Book Bans</div>', unsafe_allow_html=True)
+    with st.container():
+        st.markdown('<div class="fade-container">', unsafe_allow_html=True)
+        import bookbans
+        bookbans.run_bookbans()
+        st.markdown('</div>', unsafe_allow_html=True)
+        
 elif menu == "Defunding Research":
     st.markdown('<div id="section-title">Defunding Research</div>', unsafe_allow_html=True)
     with st.container():
@@ -176,12 +184,4 @@ elif menu == "Climate Censorship":
         st.markdown('<div class="fade-container">', unsafe_allow_html=True)
         import fedtracker_st
         fedtracker_st.run_fedtracker()
-        st.markdown('</div>', unsafe_allow_html=True)
-
-elif menu == "Book Bans":
-    st.markdown('<div id="section-title">Book Bans</div>', unsafe_allow_html=True)
-    with st.container():
-        st.markdown('<div class="fade-container">', unsafe_allow_html=True)
-        import bookbans
-        bookbans.run_bookbans()
         st.markdown('</div>', unsafe_allow_html=True)
