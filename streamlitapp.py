@@ -120,13 +120,18 @@ html, body, [class*="css"] {
 
 
 [data-testid="stSidebar"] {
-    background-color: #f8f9fa;
-    width: 300px;
+    width: 220px !important;
+    min-width: 220px !important;
+    max-width: 220px !important;
+    padding-right: 10px;
+    background-color: #F8F7F2;
 }
-
-// don't want the menu to show initially
-section[data-testid="stSidebar"] > div:first-child {
-    display: none;
+            
+[data-testid="stSidebar"] .block-container {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
 }
 
 .sidebar-toggle {
@@ -135,14 +140,7 @@ section[data-testid="stSidebar"] > div:first-child {
     padding: 10px;
     color: #333;
 }
-
-# Sidebar toggle
-st.sidebar.markdown("### › Menu")
-menu = st.sidebar.radio("",
-    ["Co-occurrence Network", "Redacted Word Cloud", "Sunburst Themes"],
-    label_visibility="collapsed"
-)
-            
+         
 h1, h2, h3, .stMarkdown > div {
     animation: fadeIn 1s ease-in;
 }
@@ -150,33 +148,40 @@ h1, h2, h3, .stMarkdown > div {
 </style>
 """, unsafe_allow_html=True)
 
+with st.sidebar.expander("Navigate"):
+    menu = st.radio(
+        "",
+        ["Introduction", "Defunding Research", "Climate Censorship", "Book Bans"]
+    )
+
 # project description
-st.markdown('<div id="redacted-title">REDACTED</div>', unsafe_allow_html=True)
-st.markdown('<div id="byline">by Jefrey Alexander, Janavi Kumar, and Peter Silverstein</div>', unsafe_allow_html=True)
-st.markdown('<div class="typewriter-1">This project explores patterns and potential ramifications </div>', unsafe_allow_html=True)
-st.markdown('<div class="typewriter-2">of information removal in recent years in the United States, </div>', unsafe_allow_html=True)
-st.markdown('<div class="typewriter-3">from defunding research to book bans to the alterration of government websites. </div>', unsafe_allow_html=True)
+if menu == "Introduction":
+    st.markdown('<div id="redacted-title">REDACTED</div>', unsafe_allow_html=True)
+    st.markdown('<div id="byline">by Jefrey Alexander, Janavi Kumar, and Peter Silverstein</div>', unsafe_allow_html=True)
+    st.markdown('<div class="typewriter-1">This project explores patterns and potential ramifications </div>', unsafe_allow_html=True)
+    st.markdown('<div class="typewriter-2">of information removal in recent years in the United States, </div>', unsafe_allow_html=True)
+    st.markdown('<div class="typewriter-3">from defunding research to book bans to the alterration of government websites. </div>', unsafe_allow_html=True)
 
-time.sleep(6)
-st.markdown('<div id="section-title">Defunding Research</div>', unsafe_allow_html=True)
-with st.container():
-    st.markdown('<div class="fade-container">', unsafe_allow_html=True)
-    import research_papers
-    research_papers.run()
-    st.markdown('</div>', unsafe_allow_html=True)
+elif menu == "Defunding Research":
+    st.markdown('<div id="section-title">Defunding Research</div>', unsafe_allow_html=True)
+    with st.container():
+        st.markdown('<div class="fade-container">', unsafe_allow_html=True)
+        import research_papers
+        research_papers.run()
+        st.markdown('</div>', unsafe_allow_html=True)
 
-time.sleep(2)
-st.markdown('<div id="section-title">Climate Censorship on Government Websites</div>', unsafe_allow_html=True)
-with st.container():
-    st.markdown('<div class="fade-container">', unsafe_allow_html=True)
-    import fedtracker_st
-    fedtracker_st.run_fedtracker()
-    st.markdown('</div>', unsafe_allow_html=True)
+elif menu == "Climate Censorship":
+    st.markdown('<div id="section-title">Climate Censorship on Government Websites</div>', unsafe_allow_html=True)
+    with st.container():
+        st.markdown('<div class="fade-container">', unsafe_allow_html=True)
+        import fedtracker_st
+        fedtracker_st.run_fedtracker()
+        st.markdown('</div>', unsafe_allow_html=True)
 
-time.sleep(2)
-st.markdown('<div id="section-title">Book Bans</div>', unsafe_allow_html=True)
-with st.container():
-    st.markdown('<div class="fade-container">', unsafe_allow_html=True)
-    import bookbans
-    bookbans.run_bookbans()
-    st.markdown('</div>', unsafe_allow_html=True)
+elif menu == "Book Bans":
+    st.markdown('<div id="section-title">Book Bans</div>', unsafe_allow_html=True)
+    with st.container():
+        st.markdown('<div class="fade-container">', unsafe_allow_html=True)
+        import bookbans
+        bookbans.run_bookbans()
+        st.markdown('</div>', unsafe_allow_html=True)
