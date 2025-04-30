@@ -7,3 +7,4 @@ pyvis
 altair
 regex
 folium
+streamlit_folium
