@@ -6,3 +6,4 @@ plotly
 pyvis
 altair
 regex
+folium

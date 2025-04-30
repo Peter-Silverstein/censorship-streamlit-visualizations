@@ -1,6 +1,8 @@
 import streamlit as st
+import time
 import research_papers
 import fedtracker_st
+import bookbans
 
 # set up page
 st.set_page_config(page_title="REDACTED", layout="wide")
@@ -8,16 +10,17 @@ st.set_page_config(page_title="REDACTED", layout="wide")
 #styling & html for title & typing things
 st.markdown("""
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Playfair+Display:wght@700&display=swap');
-
-//get this to work lowkey
 html, body, [class*="css"] {
     background-color: #ffffff;
     color: #000000;
-    font-family: 'Merriweather', 'Playfair Display', Georgia, serif;
     word-wrap: break-word;
     overflow-wrap: break-word;
     white-space: normal;
+}
+
+// set font everywhere
+* {
+    font-family: 'Courier New', monospace !important;
 }
 
 #redacted-title {
@@ -63,7 +66,7 @@ html, body, [class*="css"] {
 .plain-text {
     font-family: 'Courier New', Courier, monospace;
 }
-
+        
 .typewriter-1, .typewriter-2 , .typewriter-3 {
     font-family: 'Courier New', Courier, monospace;
     overflow: hidden;
@@ -90,7 +93,7 @@ html, body, [class*="css"] {
             
 .typewriter-3 {
     animation:
-        typing 4s steps(70, end) 3.75s forwards,
+        typing 4s steps(70, end) 4s forwards,
         caret-disappear 0.1s forwards 0s;
 }
 
@@ -104,12 +107,50 @@ html, body, [class*="css"] {
     from { border-right: 0.15em solid black; }
     to { border-right: none; }
 } 
+
+
+[data-testid="stSidebar"] {
+    background-color: #f8f9fa;
+    width: 300px;
+}
+
+// don't want the menu to show initially
+section[data-testid="stSidebar"] > div:first-child {
+    display: none;
+}
+
+.sidebar-toggle {
+    font-weight: bold;
+    cursor: pointer;
+    padding: 10px;
+    color: #333;
+}
+
+# Sidebar toggle
+st.sidebar.markdown("### › Menu")
+menu = st.sidebar.radio("",
+    ["Co-occurrence Network", "Redacted Word Cloud", "Sunburst Themes"],
+    label_visibility="collapsed"
+)
+            
+h1, h2, h3, .stMarkdown > div {
+    animation: fadeIn 1s ease-in;
+}
+
+/* Shrink sidebar padding and hide built-in title */
+[data-testid="stSidebar"] > div:first-child {
+    padding-top: 1rem;
+}
+
 </style>
 """, unsafe_allow_html=True)
+
+# project description
 st.markdown('<div id="redacted-title">REDACTED</div>', unsafe_allow_html=True)
 st.markdown('<div class="typewriter-1">This project explores patterns and potential ramifications </div>', unsafe_allow_html=True)
 st.markdown('<div class="typewriter-2">of information removal in recent years in the United States, </div>', unsafe_allow_html=True)
 st.markdown('<div class="typewriter-3">from books bans to flagged research to the alterration of government websites. </div>', unsafe_allow_html=True)
 
+time.sleep(6)
 research_papers.run()
 fedtracker_st.run_fedtracker()

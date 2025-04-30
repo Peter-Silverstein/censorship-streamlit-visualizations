@@ -89,6 +89,4 @@ def run():
     )
 
     st.plotly_chart(fig, use_container_width=True)
-
-    # PARAGRAPH 2
-    st.markdown('<div class="typewriter">Connecting redacted narratives...</div>', unsafe_allow_html=True)
+run()
