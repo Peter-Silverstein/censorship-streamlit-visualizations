@@ -78,13 +78,13 @@ def run():
         word_counts.reset_index(),
         x='index',
         y='count',
-        labels={'index': 'Banned Word', 'count': 'Count'},
+        labels={'index': 'Flagged Word', 'count': 'Count'},
         color_discrete_sequence=['red']
     )
 
     fig.update_layout(
         title={
-            'text': 'Banned Words Frequency in Research Abstracts',
+            'text': 'Flagged Words Frequency in Research Abstracts',
             'y':0.9,
             'x':0.5,
             'xanchor': 'center',
