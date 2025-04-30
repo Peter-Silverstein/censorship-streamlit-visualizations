@@ -37,6 +37,7 @@ html, body, [class*="css"] {
 
 #redacted-title::after {
     content: 'A Look At Censorship in Modern America';
+    font-family: 'Courier New', Courier, monospace;
     font-size: 20px;
     color: #FFFFFF;
     position: absolute;
@@ -63,7 +64,7 @@ html, body, [class*="css"] {
     font-family: 'Courier New', Courier, monospace;
 }
 
-.typewriter-1, .typewriter-2 {
+.typewriter-1, .typewriter-2 , .typewriter-3 {
     font-family: 'Courier New', Courier, monospace;
     overflow: hidden;
     white-space: nowrap;
@@ -77,23 +78,24 @@ html, body, [class*="css"] {
 
 .typewriter-1 {
     animation:
-        typing1 4s steps(50, end) 0s forwards,
+        typing 4s steps(50, end) 0s forwards,
         caret-disappear 0.1s forwards 0.1s;
 }
 
 .typewriter-2 {
     animation:
-        typing2 4s steps(70, end) 1.5s forwards,
+        typing 4s steps(70, end) 2s forwards,
+        caret-disappear 0.1s forwards 0s;
+}
+            
+.typewriter-3 {
+    animation:
+        typing 4s steps(70, end) 3.75s forwards,
         caret-disappear 0.1s forwards 0s;
 }
 
 /* Typing animations */
-@keyframes typing1 {
-    from { width: 0 }
-    to { width: 100% }
-}
-
-@keyframes typing2 {
+@keyframes typing {
     from { width: 0 }
     to { width: 100% }
 }
@@ -104,6 +106,10 @@ html, body, [class*="css"] {
 } 
 </style>
 """, unsafe_allow_html=True)
+st.markdown('<div id="redacted-title">REDACTED</div>', unsafe_allow_html=True)
+st.markdown('<div class="typewriter-1">This project explores patterns and potential ramifications </div>', unsafe_allow_html=True)
+st.markdown('<div class="typewriter-2">of information removal in recent years in the United States, </div>', unsafe_allow_html=True)
+st.markdown('<div class="typewriter-3">from books bans to flagged research to the alterration of government websites. </div>', unsafe_allow_html=True)
 
 research_papers.run()
 fedtracker_st.run_fedtracker()

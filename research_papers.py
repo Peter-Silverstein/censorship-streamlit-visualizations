@@ -13,7 +13,6 @@ import plotly.express as px
 
 def run():
     # ACTUAL STREAMLIT APP
-    st.markdown('<div id="redacted-title">REDACTED</div>', unsafe_allow_html=True)
     @st.cache_data
     def load_data():
         df = pd.read_csv('abstracts.csv')
@@ -60,8 +59,8 @@ def run():
     # PARAGRAPH 1
     percent_banned = df['contains_banned'].mean() * 100
     percent_text = f"""{percent_banned:.2f}% contained flagged words as listed by the <a href="https://www.nytimes.com/interactive/2025/03/07/us/trump-federal-agencies-websites-words-dei.html" target="_blank" style="color: inherit; text-decoration: underline;">New York Times</a>."""
-    st.markdown('<div class="typewriter-1">Out of 1000 abstracts selected from top journals,</div>', unsafe_allow_html=True)
-    st.markdown(f'<div class="typewriter-2">{percent_text}</div>', unsafe_allow_html=True)
+    #st.markdown('<div class="typewriter-1">Out of 1000 abstracts selected from top journals,</div>', unsafe_allow_html=True)
+    #st.markdown(f'<div class="typewriter-2">{percent_text}</div>', unsafe_allow_html=True)
 
     
     fig = px.bar(
