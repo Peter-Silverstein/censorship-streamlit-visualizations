@@ -93,7 +93,6 @@ def run():
     col1, col2 = st.columns(2)
 
     with col1:
-        st.subheader("Flagged Words Word Cloud")
         wordcloud = WordCloud(
             width=600,
             height=400,
@@ -104,12 +103,21 @@ def run():
         fig_wc, ax_wc = plt.subplots(figsize=(8, 6))
         ax_wc.imshow(wordcloud, interpolation='bilinear')
         ax_wc.axis("off")
+        ax_wc.set_title(
+            "Flagged Words Word Cloud",
+            fontsize=18,
+            color='black',
+            fontname='Courier New', 
+            fontweight='bold'
+        )
+        st.markdown("<div style='height:5px;'></div>", unsafe_allow_html=True)
         st.pyplot(fig_wc)
         
 
     # Horizontal Bar Chart
     with col2:
             word_counts_sorted = word_counts.reset_index().sort_values(by='count', ascending=False)
+        
             fig = px.bar(
                 word_counts_sorted,
                 x='count',
@@ -127,12 +135,12 @@ def run():
             fig.update_layout(
                 title={
                     'text': 'Flagged Words Frequency in Research Abstracts',
-                    'y':0.9,
+                    'y':1,
                     'x':0.5,
                     'xanchor': 'center',
                     'yanchor': 'top',
                     'font': {
-                        'family': 'Courier New, monospace!',
+                        'family': 'Courier New, monospace',
                         'size': 17,
                         'color': 'black',
                     }
@@ -140,6 +148,6 @@ def run():
                 xaxis_tickangle=-45,
                 bargap=0.2
             )
-
+            st.markdown("<div style='height:12px;'></div>", unsafe_allow_html=True)
             st.plotly_chart(fig, use_container_width=True)
 run()
