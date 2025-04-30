@@ -32,7 +32,7 @@ def run():
         font-family: 'Courier New', Courier, monospace;
         text-align: center;
         opacity: 0;
-        animation: fadeIn 3s ease-in forwards;
+        animation: fadeIn 0.5s ease-in forwards;
         animation-delay: 0s;
         position: relative;
     }                             

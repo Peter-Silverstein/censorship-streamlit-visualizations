@@ -4,6 +4,23 @@ import altair as alt
 import streamlit as st
 import regex as re
 
+st.markdown("""
+    <style>
+    .st-bo {
+        background-color: rgb(0, 0, 0); important! 
+    }
+                
+    .plain-text {
+        font-size: 15px;   
+        font-family: 'Courier New', Courier, monospace;
+        text-align: center;
+        animation: fadeIn 0.5s ease-in forwards;
+        animation-delay: 0s;
+        opacity: 0;
+        position: relative;
+    }                             
+    </style>
+""", unsafe_allow_html=True)
 
 # Run!
 def run_fedtracker():
@@ -49,16 +66,9 @@ def run_fedtracker():
             
         return filtered_df
 
-    st.header("Climate Censorship on Government Websites")
-    st.write("Beyond censorship that occurs upstream, when funding is allocated to researchers, " \
-    "availability of existing information, research, and data can be censored as well. When scientific information" \
-    "is highly contested political territory (such as research on the climate or vaccines), the controlling party" \
-    "may choose to censor information that does not conform to their worldview. In this section, we offer an exploration of" \
-    "a dataset from the Environmental Data & Governance Initiative (EDGI).")
-    st.write("The EDGI tracks environment-related content removal and accessibility changes made by the Trump Administration" \
-    "over the first few months of 2025. Changes are categorized with the agency they were associated with, as well as what " \
-    "topics they involved. For example, one entry for the Department of Transportation indicated that a menu link to the " \
-    "'Climate and Sustainability' page was removed, which was tagged with the 'Climate' and 'Infrastructure' tags.")
+    st.markdown('<div class="plain-text">Beyond censorship that occurs upstream, when funding is allocated to researchers, availability of existing information, research, and data can be censored as well. When scientific information is highly contested political territory (such as research on the climate or vaccines), the controlling party may choose to censor information that does not conform to their worldview. In this section, we offer an exploration of a dataset from the Environmental Data & Governance Initiative (EDGI). </div>', unsafe_allow_html=True)
+    st.markdown('<div class="plain-text">The EDGI tracks environment-related content removal and accessibility changes made by the Trump Administration over the first few months of 2025. Changes are categorized with the agency they were associated with, as well as what topics they involved. For example, one entry for the Department of Transportation indicated that a menu link to the \'Climate and Sustainability\' page was removed, which was tagged with the \'Climate\' and \'Infrastructure\' tags. </div>', unsafe_allow_html=True)
+    
     df_long, agencies, simplified_agency_counts = get_fed_data()
 
     agency_order = ["EPA", "DOT", "NOAA", "CEQ", "USGCRP", "OTHER"]
@@ -97,11 +107,7 @@ def run_fedtracker():
     st.subheader("Which federal agency websites had the most climate-related content removals?")
     st.altair_chart(agency_chart, use_container_width=True)
 
-    st.write("Unsurprisingly, the EPA tops the list, but the Department of Transportation's presence in the top 5 shows how " \
-     "climate-related censorship actions pervade a variety of government agencies. In the following chart, you can examine what " \
-     "censorship actions look like for each of the federal entities within the dataset. Note the presence of both explicitly climate-" \
-     "related entities (e.g., EPA, NOAA) alongside ones that are, at a surface level, not related to climate (e.g., Department of " \
-     "Justice, Department of State).")
+    st.markdown('<div class="plain-text">Unsurprisingly, the EPA tops the list, but the Department of Transportation\'s presence in the top 5 shows how climate-related censorship actions pervade a variety of government agencies. In the following chart, you can examine what censorship actions look like for each of the federal entities within the dataset. Note the presence of both explicitly climate-related entities (e.g., EPA, NOAA) alongside ones that are, at a surface level, not related to climate (e.g., Department of Justice, Department of State).<div>', unsafe_allow_html=True)
  
 
     st.subheader("What are the changes related to?")

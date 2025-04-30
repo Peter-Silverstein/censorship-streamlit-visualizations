@@ -12,6 +12,24 @@ def run_bookbans():
         lowercase = lambda x: str(x).lower()
         data.rename(lowercase, axis='columns', inplace=True)
         return data
+    
+    st.markdown("""
+    <style>
+    .st-bo {
+        background-color: rgb(0, 0, 0); important! 
+    }
+                
+    .plain-text {
+        font-size: 15px;   
+        font-family: 'Courier New', Courier, monospace;
+        text-align: center;
+        animation: fadeIn 0.5s ease-in forwards;
+        animation-delay: 0s;
+        opacity: 0;
+        position: relative;
+    }                             
+    </style>
+    """, unsafe_allow_html=True)
 
     # Function to plot bans by year
     def plot_bans_by_year(df, year):
@@ -38,12 +56,7 @@ def run_bookbans():
         return m
 
     # Start of Streamlit app
-    st.header("Book Bans in the United States")
-    st.write(
-        "Book bans are a form of censorship that can have significant implications for free speech, "
-        "intellectual freedom, and access to information. In the United States, book bans have been a contentious issue, "
-        "with various states and school districts implementing restrictions on certain books in libraries and classrooms."
-    )
+    st.markdown('<div class="plain-text">Book bans are a form of censorship that can have significant implications for free speech, intellectual freedom, and access to information. In the United States, book bans have been a contentious issue, with various states and school districts implementing restrictions on certain books in libraries and classrooms.</div>', unsafe_allow_html=True)
 
     # Load data
     data = load_data()

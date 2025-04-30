@@ -157,13 +157,7 @@ st.markdown('<div class="typewriter-1">This project explores patterns and potent
 st.markdown('<div class="typewriter-2">of information removal in recent years in the United States, </div>', unsafe_allow_html=True)
 st.markdown('<div class="typewriter-3">from books bans to defunding research to the alterration of government websites. </div>', unsafe_allow_html=True)
 
-#load empty sections first visually
-#section1 = st.empty() 
-section2 = st.empty()
-section3 = st.empty()
-
 time.sleep(6)
-st.markdown('<div id="section-title">Book Bans</div>', unsafe_allow_html=True)
 st.markdown('<div id="section-title">Defunding Research</div>', unsafe_allow_html=True)
 with st.container():
     st.markdown('<div class="fade-container">', unsafe_allow_html=True)
@@ -172,9 +166,17 @@ with st.container():
     st.markdown('</div>', unsafe_allow_html=True)
 
 time.sleep(2)
-st.markdown('<div id="section-title">Removing & Alterring Websites</div>', unsafe_allow_html=True)
+st.markdown('<div id="section-title">Climate Censorship on Government Websites</div>', unsafe_allow_html=True)
 with st.container():
     st.markdown('<div class="fade-container">', unsafe_allow_html=True)
     import fedtracker_st
     fedtracker_st.run_fedtracker()
+    st.markdown('</div>', unsafe_allow_html=True)
+
+time.sleep(2)
+st.markdown('<div id="section-title">Book Bans</div>', unsafe_allow_html=True)
+with st.container():
+    st.markdown('<div class="fade-container">', unsafe_allow_html=True)
+    import bookbans
+    bookbans.run_bookbans()
     st.markdown('</div>', unsafe_allow_html=True)
