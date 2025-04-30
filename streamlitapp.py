@@ -127,11 +127,12 @@ html, body, [class*="css"] {
     background-color: #F8F7F2;
 }
             
-[data-testid="stSidebar"] .block-container {
-    padding-top: 1rem;
-    padding-bottom: 1rem;
-    padding-left: 0.5rem;
-    padding-right: 0.5rem;
+/* Remove highlight on selected radio item */
+[data-testid="stSidebar"] .css-1cpxqw2, /* wrapper for radio items */
+[data-testid="stSidebar"] .css-16idsys {
+    background-color: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
 }
 
 .sidebar-toggle {
@@ -169,7 +170,7 @@ elif menu == "Book Bans":
         import bookbans
         bookbans.run_bookbans()
         st.markdown('</div>', unsafe_allow_html=True)
-        
+
 elif menu == "Defunding Research":
     st.markdown('<div id="section-title">Defunding Research</div>', unsafe_allow_html=True)
     with st.container():
