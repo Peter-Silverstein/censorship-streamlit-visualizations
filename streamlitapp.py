@@ -1,8 +1,5 @@
 import streamlit as st
 import time
-import research_papers
-import fedtracker_st
-import bookbans
 
 # set up page
 st.set_page_config(page_title="REDACTED", layout="wide")
@@ -56,6 +53,7 @@ html, body, [class*="css"] {
 }
 
 @keyframes fadeIn {
+    from { opacity: 0; }
     to { opacity: 1; }
 }
 
@@ -151,6 +149,14 @@ st.markdown('<div class="typewriter-1">This project explores patterns and potent
 st.markdown('<div class="typewriter-2">of information removal in recent years in the United States, </div>', unsafe_allow_html=True)
 st.markdown('<div class="typewriter-3">from books bans to flagged research to the alterration of government websites. </div>', unsafe_allow_html=True)
 
-time.sleep(6)
+time.sleep(12)
+st.markdown("<div style='animation: fadeIn 2s;'>", unsafe_allow_html=True)
+
+#import bookbans
+#bookbans.run_bookbans()
+
+import research_papers
 research_papers.run()
+
+import fedtracker_st
 fedtracker_st.run_fedtracker()
