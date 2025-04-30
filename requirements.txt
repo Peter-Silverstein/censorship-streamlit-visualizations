@@ -10,3 +10,4 @@ folium
 streamlit_folium
 wordcloud
 plotly.express
+streamlit_scroll_navigation
