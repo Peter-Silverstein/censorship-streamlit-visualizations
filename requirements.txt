@@ -9,3 +9,4 @@ regex
 folium
 streamlit_folium
 wordcloud
+plotly.express

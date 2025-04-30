@@ -150,4 +150,25 @@ def run():
             )
             st.markdown("<div style='height:12px;'></div>", unsafe_allow_html=True)
             st.plotly_chart(fig, use_container_width=True)
+
+    #MORE VISUALIZATIONS
+    # remove 'Unknown' themes and create a flagged column
+    df_sunburst = df[df['theme'] != 'Unknown'].copy()
+    df_sunburst['flagged'] = df_sunburst['contains_banned'].map({True: 'Flagged', False: 'Not Flagged'})
+
+    sunburst_fig = px.sunburst(
+        df_sunburst,
+        path=['theme', 'flagged'],
+        title="Research Themes and Flagged Status",
+        color='flagged',
+        color_discrete_map={'Flagged': 'red', 'Not Flagged': 'lightgray'}
+    )
+
+    sunburst_fig.update_layout(
+        height=800,  # Increase figure height
+        margin=dict(t=80, l=0, r=0, b=0),
+        uniformtext=dict(minsize=10, mode='hide')  # prevents text overlap
+    )
+
+    st.plotly_chart(sunburst_fig, use_container_width=True)
 run()
