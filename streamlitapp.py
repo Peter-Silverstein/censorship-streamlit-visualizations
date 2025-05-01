@@ -8,6 +8,7 @@ st.set_page_config(page_title="REDACTED", layout="wide")
 #styling & html for title & typing things
 st.markdown("""
 <style>
+
 html, body, [class*="css"] {
     background-color: #ffffff;
     color: #000000;
@@ -185,6 +186,28 @@ section[data-testid="stMain"], [data-testid="stSidebar"] {
 h1, h2, h3, .stMarkdown > div {
     animation: fadeIn 1s ease-in;
 }
+            
+/* Target the main heading container */
+[data-testid="stHeadingWithActionElements"] {
+    color: #ffffff !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    height: 0.3rem !important;
+    min-height: 0 !important;
+    line-height: 0.5 !important;
+    font-size: 0.1rem !important;
+}
+
+/* Target the h3 element directly */
+[data-testid="stHeadingWithActionElements"] h3 {
+    color: #ffffff !important;
+}
+
+/* Target the link icon */
+.st-emotion-cache-yinll1 svg {
+    display: none; /* Or color: #ffffff; to make it white */
+}
+
 
 </style>
 """, unsafe_allow_html=True)
@@ -227,7 +250,7 @@ with st.sidebar:
     )
 
 # Introduction
-st.subheader("", anchor = "Introduction")
+st.subheader(".", anchor = "Introduction")
 st.markdown('<div id="redacted-title">REDACTED</div>', unsafe_allow_html=True)
 st.markdown('<div id="byline">by <a href="https://github.com/ilovedogs3003" target="_blank" style="color: inherit; text-decoration: underline;">Jefrey Alexander</a>, <a href="https://github.com/janavikumar" target="_blank" style="color: inherit; text-decoration: underline;">Janavi Kumar</a>, and <a href="https://github.com/Peter-Silverstein" target="_blank" style="color: inherit; text-decoration: underline;">Peter Silverstein</a></div>', unsafe_allow_html=True)
 st.markdown('<div class="typewriter-1"><br>This project explores patterns and potential ramifications </div>', unsafe_allow_html=True)
@@ -236,7 +259,7 @@ st.markdown('<div class="typewriter-3">from book bans to defunding academic rese
 st.markdown('<div class="typewriter-4">to the alteration of government websites.</div>', unsafe_allow_html=True)
 
 # Book Bans
-st.subheader("", anchor = "Book Bans")
+st.subheader(".", anchor = "Book Bans")
 st.markdown('<div id="section-title">Book Bans</div>', unsafe_allow_html=True)
 with st.container():
     st.markdown('<div class="fade-container">', unsafe_allow_html=True)
@@ -245,7 +268,7 @@ with st.container():
     st.markdown('</div>', unsafe_allow_html=True)
 
 # Defunding Research
-st.subheader("", anchor = "Defunding Research")
+st.subheader(".", anchor = "Defunding Research")
 st.markdown('<div id="section-title">Defunding Research</div>', unsafe_allow_html=True)
 with st.container():
     st.markdown('<div class="fade-container">', unsafe_allow_html=True)
@@ -254,7 +277,7 @@ with st.container():
     st.markdown('</div>', unsafe_allow_html=True)
 
 # Climate Censorship
-st.subheader("", anchor = "Climate Censorship")
+st.subheader(".", anchor = "Climate Censorship")
 st.markdown('<div id="section-title">Climate Censorship on Government Websites</div>', unsafe_allow_html=True)
 with st.container():
     st.markdown('<div class="fade-container">', unsafe_allow_html=True)
