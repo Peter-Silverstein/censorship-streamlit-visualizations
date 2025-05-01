@@ -47,10 +47,10 @@ def run_fedtracker():
         simplified_agency_counts['midpoint_norm'] = simplified_agency_counts['text_position'] / total
             
         # Topics DataFrame
-        df_topics = df[["Agency", "Topic 1", "Topic 2"]].copy()
+        df_topics = df[["Agency", "Access Change", "Substance Change", "Topic 1", "Topic 2"]].copy()
         df_topics['ID'] = df.index
         df_long = pd.melt(df_topics, 
-                    id_vars=['ID', "Agency"], 
+                    id_vars=['ID', "Agency", "Access Change", "Substance Change"], 
                     value_vars=['Topic 1', 'Topic 2'],
                     var_name='value',
                     value_name='Topic')
@@ -62,6 +62,12 @@ def run_fedtracker():
         filtered_df = df
         if agency:
             filtered_df = filtered_df[filtered_df['Agency'] == agency]
+
+        if change_type:
+            if change_type == "Access":
+                filtered_df = filtered_df[filtered_df['Access Change'] == 1]
+            elif change_type == "Content":
+                filtered_df = filtered_df[filtered_df['Substance Change'] == 1]
             
         return filtered_df
 
@@ -107,14 +113,31 @@ def run_fedtracker():
     st.subheader("Which federal agency websites had the most climate-related content removals?")
     st.altair_chart(agency_chart, use_container_width=True)
 
-    st.markdown('<div class="plain-text">Unsurprisingly, the EPA tops the list, but the Department of Transportation\'s presence in the top 5 shows how climate-related censorship actions pervade a variety of government agencies. In the following chart, you can examine what censorship actions look like for each of the federal entities within the dataset. Note the presence of both explicitly climate-related entities (e.g., EPA, NOAA) alongside ones that are, at a surface level, not related to climate (e.g., Department of Justice, Department of State).<div>', unsafe_allow_html=True)
- 
+    st.markdown('<div class="plain-text">Unsurprisingly, the EPA tops the list, but the Department of Transportation\'s presence in the top 5 shows how climate-related censorship actions pervade a variety of government agencies.<div>', unsafe_allow_html=True)
+    st.write("")
+    st.markdown('<div class="plain-text">In the following chart, you can examine what censorship actions look like for each of the federal entities within the dataset. Note the presence of both explicitly climate-related entities (e.g., EPA, NOAA) alongside ones that are, at a surface level, not related to climate (e.g., Department of Justice, Department of State). You can also filter based on alteration type--some changes are simply to the content of the website (i.e., changing name of a term), while others are access changes (i.e., links removed, webpage not found error).<div>', unsafe_allow_html=True)
+    st.write("")
 
     st.subheader("What are the changes related to?")
 
     col1, col2 = st.columns([1,5])
 
     with col1:
+        st.markdown("""
+            <style>
+            div[data-baseweb="select"] {
+                background-color: white;
+            }
+            div[data-baseweb="select"] > div {
+                background-color: white;
+            }
+            
+            div[data-baseweb="select"] > div > div {
+                background-color: white;
+            }
+            </style>
+        """, unsafe_allow_html=True)
+
         agency = st.selectbox(
             "Select an agency",
             agencies["Agency"],
@@ -126,6 +149,13 @@ def run_fedtracker():
             longname = agencies.loc[agencies["Agency"] == agency, "LongName"].iloc[0]
         else:
             longname = "All Tracked Government Websites"
+
+        change_type = st.selectbox(
+            "Select an alteration type",
+            ["Access", "Content"],
+            index = None,
+            placeholder="All types"
+        )
 
     filtered_df = filter_data(df_long, agency)
     filtered_df = filtered_df.reset_index(drop=True)

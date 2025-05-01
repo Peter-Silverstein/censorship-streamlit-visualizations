@@ -10,6 +10,8 @@ st.markdown("""
 <style>
 
 html, body, [class*="css"] {
+    scroll-padding-top: 4rem; /* Adjust based on your header height */
+    scroll-behavior: smooth;
     background-color: #ffffff;
     color: #000000;
     word-wrap: break-word;
@@ -208,7 +210,11 @@ h1, h2, h3, .stMarkdown > div {
     display: none; /* Or color: #ffffff; to make it white */
 }
 
-
+[id^="Introduction"], [id^="Book Bans"], [id^="Defunding Research"], [id^="Climate Censorship"] {
+    scroll-margin-top: 4rem;
+    padding-top: 1rem;
+}
+            
 </style>
 """, unsafe_allow_html=True)
 
